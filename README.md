@@ -8,6 +8,8 @@ A YouTube music downloader desktop app.
 
 ![Screenshot of the app](./screenshot.png)
 
+This app uses `ytdl-core` to download the best quality audio from YouTube and then uses "Fluent ffmpeg-API" to format the audio as `.mp3` (most compatible with Spotify).
+
 Improvements from YTBL v1:
 
 - No server to run
