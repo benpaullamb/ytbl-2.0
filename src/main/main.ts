@@ -14,7 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import downloadSongs from './music-downloader';
+import downloadSongs, { getInfo } from './music-downloader';
 
 export default class AppUpdater {
   constructor() {
@@ -126,6 +126,7 @@ app
   .whenReady()
   .then(() => {
     ipcMain.handle('download', (_, args) => downloadSongs(args));
+    ipcMain.handle('info', (_, args) => getInfo(args));
 
     createWindow();
     app.on('activate', () => {

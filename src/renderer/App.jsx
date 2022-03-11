@@ -5,10 +5,12 @@ import Video from './components/Video';
 import { useState } from 'react';
 
 export default function App() {
+  const [searchUrl, setSearchUrl] = useState('');
   const [videos, setVideos] = useState([]);
 
-  const findSong = () => {
-    console.log('Find');
+  const findSong = async () => {
+    const info = await electron.getInfo(searchUrl);
+    console.log(info);
   };
 
   const handleKeyDown = ({ key }) => {
@@ -19,10 +21,10 @@ export default function App() {
 
   const downloadAll = async () => {
     electron.onDownloadProgress((s, info, progress) => {
-      console.log('Download progress', info, progress);
+      console.log('Download progress', progress);
     });
     electron.onDownloadError((s, info, err) => {
-      console.log('Download error', info, err);
+      console.error('Download error', err);
     });
     electron.onDownloadEnd((s, info) => {
       console.log('Download complete', info);
@@ -40,6 +42,8 @@ export default function App() {
         <h1 className={style.title}>YouTube-BL v2.0</h1>
 
         <Input
+          value={searchUrl}
+          onChange={(e) => setSearchUrl(e.currentTarget.value)}
           placeholder="YouTube URL..."
           inputClassName={style.input}
           onKeyDown={handleKeyDown}

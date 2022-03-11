@@ -25,6 +25,11 @@ const downloadSongs = async (urls: string[]) => {
 
 export default downloadSongs;
 
+export const getInfo = async (url: string) => {
+  const { videoDetails } = await ytdl.getInfo(url);
+  return videoDetails;
+};
+
 const download = async (url: string) => {
   const info = await ytdl.getInfo(url);
 
@@ -33,7 +38,7 @@ const download = async (url: string) => {
     filter: 'audioonly',
   });
 
-  saveAsMp3(audioStream, info);
+  await saveAsMp3(audioStream, info);
 
   return info.videoDetails;
 };
@@ -43,26 +48,30 @@ const saveAsMp3 = (audioStream: Readable, info: videoInfo) => {
     `C:/Users/benpa/Music/${info.videoDetails.title}.mp3`
   );
 
-  ffmpeg({
-    source: audioStream,
-    logger: console,
-  })
-    .toFormat('mp3')
-    .output(writeStream)
-    .on('progress', (progress) => {
-      sendToRenderer(
-        'download-progress',
-        info,
-        progressPercent(progress, info)
-      );
+  return new Promise((res, rej) => {
+    ffmpeg({
+      source: audioStream,
+      logger: console,
     })
-    .on('error', (err) => {
-      sendToRenderer('download-error', info, err);
-    })
-    .on('end', () => {
-      sendToRenderer('download-end', info);
-    })
-    .run();
+      .toFormat('mp3')
+      .output(writeStream)
+      .on('progress', (progress) => {
+        sendToRenderer(
+          'download-progress',
+          info,
+          progressPercent(progress, info)
+        );
+      })
+      .on('error', (err) => {
+        sendToRenderer('download-error', info, err);
+        rej(err);
+      })
+      .on('end', () => {
+        sendToRenderer('download-end', info);
+        res(info);
+      })
+      .run();
+  });
 };
 
 const progressPercent = (progress: FfmpegProgress, info: videoInfo) => {
