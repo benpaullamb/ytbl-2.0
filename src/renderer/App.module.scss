@@ -1,0 +1,53 @@
+@use 'theme' as theme;
+
+.app {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+
+  .top {
+    padding: 2rem;
+
+    .title {
+      margin-bottom: 1rem;
+      font-size: 34px;
+      font-weight: normal;
+    }
+
+    input.input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right: none;
+    }
+
+    .button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  .bottom {
+    padding: 2rem;
+    background: theme.$quaternary;
+
+    .header {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .title {
+        font-size: 24px;
+        font-weight: normal;
+      }
+
+      .downloadAll {
+        margin-right: 0.5rem;
+      }
+
+      .clear {
+        background: theme.$secondary;
+      }
+    }
+  }
+}
