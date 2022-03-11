@@ -18,7 +18,7 @@
   }
 
   &:disabled {
-    background: rgba(theme.$primary, 25%) !important;
+    background: rgba(theme.$primary, 50%) !important;
     box-shadow: none;
     cursor: not-allowed;
   }

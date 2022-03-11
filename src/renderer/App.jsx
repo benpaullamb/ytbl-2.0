@@ -1,8 +1,8 @@
 import style from './App.module.scss';
+import { useState } from 'react';
 import Input from './components/Input';
 import Button from './components/Button';
 import Video from './components/Video';
-import { useState } from 'react';
 
 export default function App() {
   const [searchUrl, setSearchUrl] = useState(
@@ -19,9 +19,11 @@ export default function App() {
       return;
     }
 
+    setIsDownloading(true);
     const info = await electron.getInfo(searchUrl);
-    console.log(info);
     setVideos((prevVideos) => [info, ...prevVideos]);
+    console.log(info);
+    setIsDownloading(false);
   };
 
   const handleKeyDown = ({ key }) => {

@@ -49,8 +49,7 @@ npm run dev
 
 ## Roadmap
 
-- [ ] Loading icon in buttons
-- [ ] Toast for safeguards
+- [ ] Animated toasts
 
 ## Release History
 
