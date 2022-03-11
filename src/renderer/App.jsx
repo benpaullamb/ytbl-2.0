@@ -22,6 +22,7 @@ export default function App() {
     setIsDownloading(true);
     const info = await electron.getInfo(searchUrl);
     setVideos((prevVideos) => [info, ...prevVideos]);
+    setSearchUrl('');
     console.log(info);
     setIsDownloading(false);
   };

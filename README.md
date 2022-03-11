@@ -4,11 +4,21 @@
 
 ## About this Project
 
-Summary
+A YouTube music downloader desktop app.
 
 ![Screenshot of the app](./screenshot.png)
 
-Description
+Improvements from YTBL v1:
+
+- No server to run
+- Desktop app
+- No requirement to install YouTube-DL or Ffmpeg before
+- Real progress bar when downloading
+- Embedded YouTube videos
+- Separated the "finding" and "downloading" phases
+- Re-design in React
+
+[Link to v1](https://github.com/benpaullamb/ytbl)
 
 ### Built with
 
@@ -33,10 +43,10 @@ Description
 npm i
 ```
 
-2. Run the build tool.
+2. Run Electron.
 
 ```
-npm run dev
+npm run start
 ```
 
 ## Deployment
@@ -45,10 +55,19 @@ npm run dev
 
 ## Usage
 
-...
+1. Paste a YouTube video URL in the bar at the top of the app.
+
+2. Press "Find".
+
+3. Repeat for any number of videos.
+
+4. Press "Download all".
+
+5. Find your downloaded music in your music folder.
 
 ## Roadmap
 
+- [ ] Auto find music folder
 - [ ] Animated toasts
 
 ## Release History
