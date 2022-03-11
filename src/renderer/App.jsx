@@ -25,7 +25,7 @@ export default function App() {
   };
 
   const handleKeyDown = ({ key }) => {
-    if (key.toLowerCase() === 'enter') {
+    if (key.toLowerCase() === 'enter' && !isDownloading) {
       findSong();
     }
   };
@@ -60,6 +60,10 @@ export default function App() {
     );
   };
 
+  const clearVideos = () => {
+    setVideos([]);
+  };
+
   const setVideoProgress = (videoId, progress) => {
     setVideos((videos) => {
       const videosCopy = [...videos];
@@ -77,6 +81,7 @@ export default function App() {
         <Input
           value={searchUrl}
           onChange={(e) => setSearchUrl(e.currentTarget.value)}
+          disabled={isDownloading}
           placeholder="YouTube URL..."
           inputClassName={style.input}
           onKeyDown={handleKeyDown}
@@ -103,7 +108,11 @@ export default function App() {
             >
               Download All
             </Button>
-            <Button disabled={isDownloading} className={style.clear}>
+            <Button
+              onClick={clearVideos}
+              disabled={isDownloading}
+              className={style.clear}
+            >
               Clear
             </Button>
           </div>

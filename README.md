@@ -51,7 +51,6 @@ npm run dev
 
 - [ ] Loading icon in buttons
 - [ ] Toast for safeguards
-- [ ] Clear button
 
 ## Release History
 
