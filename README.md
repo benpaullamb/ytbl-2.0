@@ -12,7 +12,12 @@ Description
 
 ### Built with
 
-- Tech
+- Electron
+- React
+- Sass
+- ytdl-core
+- Ffmpeg Installer
+- Fluent ffmpeg-API
 
 ## Getting Started
 
@@ -44,10 +49,9 @@ npm run dev
 
 ## Roadmap
 
-No planned features.
-
-- [ ] Feature
-- [ ] Feature
+- [ ] Loading icon in buttons
+- [ ] Toast for safeguards
+- [ ] Clear button
 
 ## Release History
 
