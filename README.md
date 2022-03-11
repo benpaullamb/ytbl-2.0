@@ -1,4 +1,4 @@
-# ytbl-v2
+# YouTube-BL v2.0
 
 ![status: in-progress](https://img.shields.io/badge/status-in--progress-green)
 
