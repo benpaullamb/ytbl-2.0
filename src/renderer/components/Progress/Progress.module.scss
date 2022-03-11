@@ -1,0 +1,25 @@
+@use '../../theme' as theme;
+
+.container {
+  height: 8px;
+  margin-top: 0.5rem;
+  position: relative;
+  background: rgba(theme.$primary, 25%);
+  border-radius: 8px;
+
+  .bar {
+    height: 100%;
+    background: theme.$primary;
+    border-radius: 8px;
+    transition: width 150ms;
+  }
+
+  .percent {
+    width: 100%;
+    position: absolute;
+    top: 12px;
+    color: rgba(black, 75%);
+    font-size: 14px;
+    text-align: center;
+  }
+}

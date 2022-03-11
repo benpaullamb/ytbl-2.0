@@ -5,12 +5,23 @@ import Video from './components/Video';
 import { useState } from 'react';
 
 export default function App() {
-  const [searchUrl, setSearchUrl] = useState('');
+  const [searchUrl, setSearchUrl] = useState(
+    'https://www.youtube.com/watch?v=us8hYVeOJZw'
+  );
   const [videos, setVideos] = useState([]);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const findSong = async () => {
+    const isAlreadyFound = videos.some(
+      ({ video_url }) => video_url === searchUrl
+    );
+    if (isAlreadyFound) {
+      return;
+    }
+
     const info = await electron.getInfo(searchUrl);
     console.log(info);
+    setVideos((prevVideos) => [info, ...prevVideos]);
   };
 
   const handleKeyDown = ({ key }) => {
@@ -20,20 +31,42 @@ export default function App() {
   };
 
   const downloadAll = async () => {
+    const videosToDownload = videos.filter(({ progress }) => progress !== 100);
+    if (videosToDownload.length === 0) {
+      return;
+    }
+
     electron.onDownloadProgress((s, info, progress) => {
       console.log('Download progress', progress);
+
+      setVideoProgress(info.videoId, progress);
     });
     electron.onDownloadError((s, info, err) => {
       console.error('Download error', err);
+
+      setIsDownloading(false);
     });
     electron.onDownloadEnd((s, info) => {
       console.log('Download complete', info);
+
+      setVideoProgress(info.videoId, 100);
+      setIsDownloading(false);
     });
-    const downloadedVideos = await electron.download([
-      'https://www.youtube.com/watch?v=us8hYVeOJZw',
-    ]);
-    setVideos(downloadedVideos);
-    console.log(downloadedVideos);
+
+    setIsDownloading(true);
+
+    const downloadedVideos = await electron.download(
+      videosToDownload.map(({ video_url }) => video_url)
+    );
+  };
+
+  const setVideoProgress = (videoId, progress) => {
+    setVideos((videos) => {
+      const videosCopy = [...videos];
+      const video = videosCopy.find((video) => video.videoId === videoId);
+      video.progress = progress;
+      return videosCopy;
+    });
   };
 
   return (
@@ -48,7 +81,11 @@ export default function App() {
           inputClassName={style.input}
           onKeyDown={handleKeyDown}
           endComponent={
-            <Button onClick={findSong} className={style.button}>
+            <Button
+              onClick={findSong}
+              disabled={isDownloading}
+              className={style.button}
+            >
               Find
             </Button>
           }
@@ -59,15 +96,23 @@ export default function App() {
         <div className={style.header}>
           <h2 className={style.title}>Videos</h2>
           <div>
-            <Button onClick={downloadAll} className={style.downloadAll}>
+            <Button
+              onClick={downloadAll}
+              disabled={isDownloading}
+              className={style.downloadAll}
+            >
               Download All
             </Button>
-            <Button className={style.clear}>Clear</Button>
+            <Button disabled={isDownloading} className={style.clear}>
+              Clear
+            </Button>
           </div>
         </div>
 
         <div className={style.videos}>
-          <Video />
+          {videos.map((video, i) => (
+            <Video key={`${video.videoId}${i}`} {...video} />
+          ))}
         </div>
       </div>
     </div>

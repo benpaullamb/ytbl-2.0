@@ -1,0 +1,39 @@
+.video {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  iframe {
+    border: none;
+    border-radius: 8px;
+  }
+
+  .info {
+    padding: 0.5rem 1rem;
+
+    span {
+      display: block;
+    }
+
+    .title {
+      font-size: 20px;
+    }
+
+    .channel {
+      margin-top: 0.5rem;
+      color: rgba(black, 75%);
+    }
+
+    .viewsAndDate {
+      margin-top: 0.5rem;
+      color: rgba(black, 75%);
+    }
+  }
+}

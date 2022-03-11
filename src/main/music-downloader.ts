@@ -1,4 +1,4 @@
-import ytdl, { videoInfo } from 'ytdl-core';
+import ytdl, { MoreVideoDetails } from 'ytdl-core';
 import ffmpegInstall from '@ffmpeg-installer/ffmpeg';
 import ffmpeg from 'fluent-ffmpeg';
 import { Duration } from 'luxon';
@@ -31,21 +31,21 @@ export const getInfo = async (url: string) => {
 };
 
 const download = async (url: string) => {
-  const info = await ytdl.getInfo(url);
+  const { videoDetails } = await ytdl.getInfo(url);
 
   const audioStream = ytdl(url, {
     quality: 'highestaudio',
     filter: 'audioonly',
   });
 
-  await saveAsMp3(audioStream, info);
+  await saveAsMp3(audioStream, videoDetails);
 
-  return info.videoDetails;
+  return videoDetails;
 };
 
-const saveAsMp3 = (audioStream: Readable, info: videoInfo) => {
+const saveAsMp3 = (audioStream: Readable, videoDetails: MoreVideoDetails) => {
   const writeStream = fs.createWriteStream(
-    `C:/Users/benpa/Music/${info.videoDetails.title}.mp3`
+    `C:/Users/benpa/Music/${videoDetails.title}.mp3`
   );
 
   return new Promise((res, rej) => {
@@ -58,24 +58,27 @@ const saveAsMp3 = (audioStream: Readable, info: videoInfo) => {
       .on('progress', (progress) => {
         sendToRenderer(
           'download-progress',
-          info,
-          progressPercent(progress, info)
+          videoDetails,
+          progressPercent(progress, videoDetails)
         );
       })
       .on('error', (err) => {
-        sendToRenderer('download-error', info, err);
+        sendToRenderer('download-error', videoDetails, err);
         rej(err);
       })
       .on('end', () => {
-        sendToRenderer('download-end', info);
-        res(info);
+        sendToRenderer('download-end', videoDetails);
+        res(videoDetails);
       })
       .run();
   });
 };
 
-const progressPercent = (progress: FfmpegProgress, info: videoInfo) => {
+const progressPercent = (
+  progress: FfmpegProgress,
+  videoDetails: MoreVideoDetails
+) => {
   const currentTime = Duration.fromISOTime(progress.timemark).toMillis() / 1000;
-  const totalDuration = Number(info.videoDetails.lengthSeconds);
+  const totalDuration = Number(videoDetails.lengthSeconds);
   return Math.floor((currentTime / totalDuration) * 100);
 };
