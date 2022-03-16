@@ -1,3 +1,4 @@
+/* eslint-disable import/first */
 /* eslint global-require: off, no-console: off, promise/always-return: off */
 
 /**
@@ -8,6 +9,18 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
+import fs from 'fs';
+
+process.on('uncaughtException', (err, origin) => {
+  fs.writeFileSync(
+    'C:/Users/benpa/Documents/Projects/ytbl-v2/error-log.json',
+    JSON.stringify({
+      err,
+      origin,
+    })
+  );
+});
+
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron';
 import { autoUpdater } from 'electron-updater';

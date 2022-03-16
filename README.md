@@ -69,6 +69,9 @@ npm run start
 
 ## Roadmap
 
+- [ ] Ffmpeg in build looking into `win_unpacked/resources/app.asar/...` There is no `app.asar.unpacked`. There's an `ffmpeg.dll` in `win_unpacked/`
+- [ ] Update `package.json` meta fields
+- [ ] Fix empty URL error
 - [ ] Auto find music folder
 - [ ] Animated toasts
 
