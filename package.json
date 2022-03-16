@@ -1,13 +1,13 @@
 {
-  "name": "YouTube-BL",
-  "description": "A YouTube music downloader desktop app",
+  "name": "electron-react-boilerplate",
+  "description": "A foundation for scalable desktop apps",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
-    "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never --windows --x64",
+    "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
     "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts && opencollective-postinstall",
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
@@ -33,8 +33,8 @@
     ]
   },
   "build": {
-    "productName": "YouTube-BL",
-    "appId": "lamb.ben.YouTube-BL",
+    "productName": "ElectronReact",
+    "appId": "org.erb.ElectronReact",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -73,7 +73,7 @@
     },
     "win": {
       "target": [
-        "portable"
+        "nsis"
       ]
     },
     "linux": {
@@ -92,20 +92,35 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "benpaullamb",
-      "repo": "ytbl-2.0"
+      "owner": "electron-react-boilerplate",
+      "repo": "electron-react-boilerplate"
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/benpaullamb/ytbl-2.0.git"
+    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
   },
   "author": {
-    "name": "Ben Lamb",
-    "email": "benpaullamb@gmail.com",
-    "url": "https://github.com/benpaullamb"
+    "name": "Electron React Boilerplate Maintainers",
+    "email": "electronreactboilerplate@gmail.com",
+    "url": "https://electron-react-boilerplate.js.org"
   },
+  "contributors": [
+    {
+      "name": "Amila Welihinda",
+      "email": "amilajack@gmail.com",
+      "url": "https://github.com/amilajack"
+    },
+    {
+      "name": "John Tran",
+      "email": "jptran318@gmail.com",
+      "url": "https://github.com/jooohhn"
+    }
+  ],
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
+  },
   "keywords": [
     "electron",
     "boilerplate",
@@ -117,7 +132,7 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/benpaullamb/ytbl-2.0",
+  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
   "jest": {
     "testURL": "http://localhost/",
     "testEnvironment": "jsdom",
