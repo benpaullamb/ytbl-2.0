@@ -13,42 +13,25 @@ interface FfmpegProgress {
 
 ffmpeg.setFfmpegPath(ffmpegInstall.path);
 
-const downloadSongs = async (urls: string[]) => {
-  const allInfo = [];
-  for (let i = 0; i < urls.length; i++) {
-    const url = urls[i];
-    const info = await download(url);
-    allInfo.push(info);
-  }
-  return allInfo;
+const progressPercent = (
+  progress: FfmpegProgress,
+  videoDetails: MoreVideoDetails
+) => {
+  const currentTime = Duration.fromISOTime(progress.timemark).toMillis() / 1000;
+  const totalDuration = Number(videoDetails.lengthSeconds);
+  return Math.floor((currentTime / totalDuration) * 100);
 };
 
-export default downloadSongs;
-
-export const getInfo = async (url: string) => {
-  const { videoDetails } = await ytdl.getInfo(url);
-  return videoDetails;
-};
-
-const download = async (url: string) => {
-  const { videoDetails } = await ytdl.getInfo(url);
-
-  const audioStream = ytdl(url, {
-    quality: 'highestaudio',
-    filter: 'audioonly',
-  });
-
-  await saveAsMp3(audioStream, videoDetails);
-
-  return videoDetails;
+const formatFileName = (name: string): string => {
+  return name.replace(/[^a-zA-Z0-9\s]/g, '');
 };
 
 const saveAsMp3 = (audioStream: Readable, videoDetails: MoreVideoDetails) => {
   const writeStream = fs.createWriteStream(
-    `C:/Users/benpa/Music/${videoDetails.title}.mp3`
+    `C:/Users/benpa/Music/${formatFileName(videoDetails.title)}.mp3`
   );
 
-  return new Promise((res, rej) => {
+  return new Promise((resolve, reject) => {
     ffmpeg({
       source: audioStream,
       logger: console,
@@ -64,21 +47,42 @@ const saveAsMp3 = (audioStream: Readable, videoDetails: MoreVideoDetails) => {
       })
       .on('error', (err) => {
         sendToRenderer('download-error', videoDetails, err);
-        rej(err);
+        reject(err);
       })
       .on('end', () => {
         sendToRenderer('download-end', videoDetails);
-        res(videoDetails);
+        resolve(videoDetails);
       })
       .run();
   });
 };
 
-const progressPercent = (
-  progress: FfmpegProgress,
-  videoDetails: MoreVideoDetails
-) => {
-  const currentTime = Duration.fromISOTime(progress.timemark).toMillis() / 1000;
-  const totalDuration = Number(videoDetails.lengthSeconds);
-  return Math.floor((currentTime / totalDuration) * 100);
+const download = async (url: string) => {
+  const { videoDetails } = await ytdl.getInfo(url);
+
+  const audioStream = ytdl(url, {
+    quality: 'highestaudio',
+    filter: 'audioonly',
+  });
+
+  await saveAsMp3(audioStream, videoDetails);
+
+  return videoDetails;
+};
+
+const downloadSongs = async (urls: string[]) => {
+  const allInfo = [];
+  for (let i = 0; i < urls.length; i++) {
+    const url = urls[i];
+    const info = await download(url);
+    allInfo.push(info);
+  }
+  return allInfo;
+};
+
+export default downloadSongs;
+
+export const getInfo = async (url: string) => {
+  const { videoDetails } = await ytdl.getInfo(url);
+  return videoDetails;
 };
